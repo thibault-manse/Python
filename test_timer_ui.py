@@ -44,6 +44,7 @@ class TimerTest:
         self.timer_label.config(text="Temps : 0.0")
 
     def update_timer_display(self):
+        """To perform the update"""
         elapsed = self.timer.update_timer()
         self.timer_label.config(text=f"Temps : {elapsed:.1f}")
         self.root.after(100, self.update_timer_display) 

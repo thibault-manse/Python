@@ -26,5 +26,12 @@ class TimerTest:
         self.update_timer_display()
 
     def perform_start_timer(self):
+        """To perform the timer start"""
         self.timer.start_timer()
         self.update_timer_display()
+    
+    def perform_pause_timer(self):
+        """To perform the timer pause method """
+        self.timer.stop_timer()
+    
+

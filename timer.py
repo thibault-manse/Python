@@ -14,4 +14,12 @@ class Timer:
             self.is_paused = False
             self.start_time = time.time()
 
+    def pause(self):
+        """ Pause or restart the timer """
+        if self.is_running:
+            self.is_running = False
+            self.is_paused = True
+            self.elapsed_time += time.time() - self.start_time
+        elif self.is_paused:
+            self.start()
     

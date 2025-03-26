@@ -40,3 +40,8 @@ class Timer:
         if self.is_running:
             return self.elapsed_time + (time.time() - self.start_time) 
         return self.elapsed_time
+    
+    def change_level_timer(self):
+        self.stop_timer()
+        self.reset_timer()
+        self.start_timer()

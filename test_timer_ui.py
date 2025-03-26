@@ -23,6 +23,9 @@ class TimerTest:
         self.reset_button = tk.Button(self.root, text="Réinitialiser", command=self.perform_reset_timer)
         self.reset_button.pack()
 
+        self.change_level_button = tk.Button(self.root, text="Change de difficulté", command=self.perform_change_level_timer)
+        self.change_level_button.pack()
+
         self.update_timer_display()
 
     def perform_start_timer(self):
@@ -42,6 +45,11 @@ class TimerTest:
         """To perform the timer reset method"""
         self.timer.reset_timer()
         self.timer_label.config(text="Temps : 0.0")
+    
+    def perform_change_level_timer(self):
+        """ To stop reset start the timer """
+        self.timer.change_level_timer()
+        self.update_timer_display()
 
     def update_timer_display(self):
         """To perform the update"""

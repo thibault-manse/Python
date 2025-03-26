@@ -3,14 +3,14 @@ import random
 
 class Minesweeper:
     COLORS = {
-        1: "#0000FF",  # bleu
-        2: "#008000",  # vert
-        3: "#FF9900",  # jaune
-        4: "#800080",  # violet
-        5: "#8B4513",  # marron
-        6: "#00CED1",  # turquoise
-        7: "#000000",  # noir
-        8: "#696969"   # gris foncé
+        1: "#0000FF",  # Bleu
+        2: "#008000",  # Vert
+        3: "#FF0000",  # Rouge
+        4: "#800080",  # Violet
+        5: "#8B4513",  # Marron
+        6: "#00CED1",  # Turquoise
+        7: "#000000",  # Noir
+        8: "#696969"   # Gris foncé
     }
 
     def __init__(self, root, rows=10, cols=10, mines=15):
@@ -21,12 +21,13 @@ class Minesweeper:
         self.buttons = []
         self.mine_positions = set()
         self.revealed = set()
+        self.marked = {}  
 
-        # Cadre principal 
+        # Cadre principal
         self.main_frame = ctk.CTkFrame(root, fg_color="#404040")
         self.main_frame.pack(fill="both", expand=True)
 
-        # Espace à gauche pour texte
+        # Espace à gauche pour les futurs boutons/infos
         self.side_frame = ctk.CTkFrame(self.main_frame, width=200, fg_color="#303030")
         self.side_frame.pack(side="left", fill="y")
 
@@ -46,7 +47,8 @@ class Minesweeper:
                     text='',
                     width=40,
                     height=40,
-                    fg_color='#808080',
+                    fg_color='#C0C0C0',
+                    hover_color='#A9A9A9',
                     border_color='#808080',
                     border_width=2,
                     corner_radius=0,
@@ -54,7 +56,9 @@ class Minesweeper:
                     command=lambda r=row, c=col: self.on_click(r, c)
                 )
                 btn.grid(row=row, column=col, padx=1, pady=1)
+                btn.bind("<Button-3>", lambda event, r=row, c=col: self.on_right_click(r, c))
                 row_buttons.append(btn)
+                self.marked[(row, col)] = None  
             self.buttons.append(row_buttons)
 
     def place_mines(self):
@@ -64,7 +68,8 @@ class Minesweeper:
             self.mine_positions.add((row, col))
 
     def on_click(self, row, col):
-        if (row, col) in self.revealed:
+        
+        if self.marked[(row, col)] is not None or (row, col) in self.revealed:
             return
 
         if (row, col) in self.mine_positions:
@@ -72,6 +77,21 @@ class Minesweeper:
             self.game_over()
         else:
             self.reveal(row, col)
+
+    def on_right_click(self, row, col):
+        
+        if (row, col) in self.revealed:
+            return
+
+        if self.marked[(row, col)] is None:
+            self.marked[(row, col)] = "?"
+            self.buttons[row][col].configure(text="?", text_color="red")
+        elif self.marked[(row, col)] == "?":
+            self.marked[(row, col)] = "🚩"
+            self.buttons[row][col].configure(text="🚩", text_color="red")
+        else:
+            self.marked[(row, col)] = None
+            self.buttons[row][col].configure(text="")
 
     def reveal(self, row, col):
         if (row, col) in self.revealed:
@@ -81,7 +101,7 @@ class Minesweeper:
         count = self.count_adjacent_mines(row, col)
 
         
-        color = self.COLORS.get(count, "black")  
+        color = self.COLORS.get(count, "black")
 
         self.buttons[row][col].configure(
             text=str(count) if count > 0 else '',
@@ -103,7 +123,6 @@ class Minesweeper:
                     count += 1
         return count
 
-   
 
 if __name__ == "__main__":
     root = ctk.CTk()

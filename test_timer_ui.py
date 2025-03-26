@@ -32,6 +32,8 @@ class TimerTest:
     
     def perform_pause_timer(self):
         """To perform the timer pause method """
-        self.timer.stop_timer()
+        self.timer.pause_timer()
     
-
+    def perform_stop_timer(self):
+        """To perform the timer stop method"""
+        self.timer.stop_timer()

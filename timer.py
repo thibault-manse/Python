@@ -35,4 +35,8 @@ class Timer:
         self.is_running = False
         self.is_paused = True
 
-    
+    def update(self):
+        """ update the elapsed time """
+        if self.is_running:
+            return self.elapsed_time + (time.time())
+        return self.elapsed_time

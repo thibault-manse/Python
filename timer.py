@@ -42,6 +42,7 @@ class Timer:
         return self.elapsed_time
     
     def change_level_timer(self):
+        """To stop reset start the timer while user change difficulty"""
         self.stop_timer()
         self.reset_timer()
         self.start_timer()

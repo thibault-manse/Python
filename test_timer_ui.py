@@ -37,3 +37,8 @@ class TimerTest:
     def perform_stop_timer(self):
         """To perform the timer stop method"""
         self.timer.stop_timer()
+
+    def perform_reset_timer(self):
+        """To perform the timer reset method"""
+        self.timer.reset_timer()
+        self.timer_label.config(text="Temps : 0.0")

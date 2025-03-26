@@ -1,4 +1,4 @@
-import tkinter as tk 
+import tkinter as tk
 from timer import Timer
 
 class TimerTest:
@@ -18,7 +18,7 @@ class TimerTest:
         self.pause_button.pack()
 
         self.stop_button = tk.Button(self.root, text="Stop", command=self.perform_stop_timer) 
-        self.pause_button.pack()
+        self.stop_button.pack()
 
         self.reset_button = tk.Button(self.root, text="Réinitialiser", command=self.perform_reset_timer)
         self.reset_button.pack()
@@ -42,3 +42,13 @@ class TimerTest:
         """To perform the timer reset method"""
         self.timer.reset_timer()
         self.timer_label.config(text="Temps : 0.0")
+
+    def update_timer_display(self):
+        elapsed = self.timer.update_timer()
+        self.timer_label.config(text=f"Temps : {elapsed:.1f}")
+        self.root.after(100, self.update_timer_display) 
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = TimerTest(root)
+    root.mainloop()

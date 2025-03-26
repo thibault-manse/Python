@@ -23,3 +23,16 @@ class Timer:
         elif self.is_paused:
             self.start()
     
+    def stop(self):
+        """ Stop the timer """
+        if self.is_running:
+            self.is_running = False
+            self.elapsed_time += time.time() - self.start_time 
+
+    def reset(self):
+        """ Reset the timer """
+        self.elapsed_time = 0
+        self.is_running = False
+        self.is_paused = True
+
+    

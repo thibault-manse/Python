@@ -41,3 +41,7 @@ class GameInfo:
         self.update_mines(self.mines)
         self.update_flags(self.flags)
         self.update_question_marks(self.question_marks)
+    
+    def stop_updates(self):
+        """To stop updates"""
+        pass

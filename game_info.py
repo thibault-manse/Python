@@ -35,3 +35,9 @@ class GameInfo:
         """To update question marks"""
         self.question_marks += change
         self.question_marks_label.configure(text=f"Points d'interrogation : {self.question_marks}")
+    
+    def update_info(self):
+        """To update info"""
+        self.update_mines(self.mines)
+        self.update_flags(self.flags)
+        self.update_question_marks(self.question_marks)

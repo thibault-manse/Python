@@ -20,3 +20,8 @@ class GameInfo:
         
         self.question_marks_label = ctk.CTkLabel(self.root, text=f"Points d'interrogation : {self.question_marks}", font=("Arial", 14))
         self.question_marks_label.pack(pady=5)
+
+    def update_mines(self, mines):
+        """To update mines"""
+        self.mines = mines
+        self.mines_label.configure(text=f"Mines : {self.mines}")

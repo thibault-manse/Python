@@ -25,3 +25,8 @@ class GameInfo:
         """To update mines"""
         self.mines = mines
         self.mines_label.configure(text=f"Mines : {self.mines}")
+
+    def update_flags(self, change):
+        """To update flags"""
+        self.flags += change
+        self.flags_label.configure(text=f"Drapeaux : {self.flags}")

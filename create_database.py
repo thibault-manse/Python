@@ -31,5 +31,22 @@ class CreateDatabase:
     def create_database(self):
         """Create minesweeper database if it doesn't exist """
         cursor = self.connection.cursor()
-        cursor.execute("CREATE DATABASE IF NOT EXISTS minesweeper")
-        print("Base de donnée crée: minesweeper")
+        try:
+            cursor.execute("CREATE DATABASE IF NOT EXISTS minesweeper")
+            print("Base de donnée crée: minesweeper")
+        except Error as error:
+            print(f"Erreur lors de la création de la base de donnée : {error}")
+    
+    def create_user_table(self):
+        """Create the users table"""
+        cursor = self.connection.user()
+        try:
+            cursor.execute("""CREATE TABLE IF NOT EXISTS users (
+                        id INT AUTO_INCREMENT PRIMARY KEY, 
+                        username VARCHAR(100) UNIQUE, 
+                        password VARCHAR(100)"""
+                        )
+            self.connection.commit()
+            print("La table Users a été crée ou existe déja.")
+        except Error as error:
+            print(f"Erreur lors de la création de la table users : {error}")

@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import random
 from Timer_demineur import Timer
+from game_info import GameInfo
 
 
 class Minesweeper:
@@ -21,6 +22,8 @@ class Minesweeper:
         
         self.timer = Timer()
 
+        self.mines =0 # add this line
+
         self.main_frame = ctk.CTkFrame(self.root)
         self.main_frame.pack(pady=20, padx=20)
 
@@ -31,6 +34,8 @@ class Minesweeper:
         self.title_label = ctk.CTkLabel(self.left_frame, text="MINESWEEPER", font=("Arial", 18, "bold"), text_color="red")
         self.title_label.pack(pady=10)
 
+        self.game_info = GameInfo(self.left_frame, 0, []) # add this line
+        
         self.status_label = ctk.CTkLabel(self.left_frame, text="", font=("Arial", 14))
         self.status_label.pack(pady=10)
         
@@ -48,6 +53,7 @@ class Minesweeper:
 
         self.grid_frame = ctk.CTkFrame(self.main_frame)
         self.grid_frame.pack(side="right", padx=20)
+        
         self.update_timer_display()
         
     def update_timer_display(self):
@@ -59,8 +65,14 @@ class Minesweeper:
 
     def start_game(self, rows, cols, mines):
         
+        self.mines = mines # add this line
+
         self.timer.reset_timer()
         self.timer.start_timer()
+
+        self.game_info.update_flags(-self.game_info.flags)  # add this line  
+        self.game_info.update_question_marks(-self.game_info.question_marks) # add this line
+        self.game_info.update_mines(self.mines) # add this line
         
         self.status_label.configure(text="")
         for widget in self.grid_frame.winfo_children():
@@ -133,10 +145,15 @@ class Minesweeper:
         if self.marked[(row, col)] is None:
             self.marked[(row, col)] = "🚩"
             self.buttons[row][col].configure(text="🚩", text_color="red")
+            self.game_info.update_flags(+1) # add this line
         elif self.marked[(row, col)] == "🚩":
             self.marked[(row, col)] = "?"
             self.buttons[row][col].configure(text="?", text_color="orange")
+            self.game_info.update_flags(-1) # add this line
+            self.game_info.update_question_marks(+1) #add this line
         else:
+            if self.marked[(row, col)] == "?": # add this line
+                self.game_info.update_question_marks(-1) # add this line
             self.marked[(row, col)] = None
             self.buttons[row][col].configure(text="")
 
@@ -179,6 +196,7 @@ class Minesweeper:
     def endgame(self, victory):
         
         self.timer.stop_timer()
+        self.game_info.stop_updates() # add this line
         self.game_over_flag = True
 
         if victory:

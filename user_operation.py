@@ -17,6 +17,11 @@ class UserOperations:
         self.db = db
         self.user_id = None
 
+    def hash_password(self, password, salt):
+        """To hash the password"""
+        return hashlib.sha256((password + salt + pepper).encode()).hexdigest()
+    
+
     
 
     def register_user(self, username, password):

@@ -27,3 +27,9 @@ class CreateDatabase:
         except Error as error:
             print(f"Erreur : {error}")
             return None
+    
+    def create_database(self):
+        """Create minesweeper database if it doesn't exist """
+        cursor = self.connection.cursor()
+        cursor.execute("CREATE DATABASE IF NOT EXISTS minesweeper")
+        print("Base de donnée crée: minesweeper")

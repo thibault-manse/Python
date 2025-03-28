@@ -13,4 +13,17 @@ class CreateDatabase:
         self.create_user_table()
         self.create_score_table()
     
-    
+    def create_connection(self):
+        """Connect to mysql"""
+        try:
+            connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password=passw
+            )
+            if connection.is_connected():
+                print("Connecté à la base de donnée.")
+            return connection
+        except Error as error:
+            print(f"Erreur : {error}")
+            return None

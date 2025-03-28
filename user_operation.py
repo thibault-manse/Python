@@ -21,6 +21,9 @@ class UserOperations:
         """To hash the password"""
         return hashlib.sha256((password + salt + pepper).encode()).hexdigest()
     
+    def generate_salt(self):
+        """To generate random salt"""
+        return secrets.token_hex(16)
 
     
 

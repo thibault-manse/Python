@@ -1,6 +1,6 @@
 import customtkinter as ctk
 import random
-from Timer_demineur import Timer
+from TimerCount import Timer
 from game_info import GameInfo
 
 

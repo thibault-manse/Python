@@ -1,13 +1,23 @@
 import os
-
 from mysql.connector import Error
 import mysql.connector
 from customtkinter import messagebox
+import hashlib
+import secrets
+from dotenv import load_dotenv
+from database_connection import Database
+import re
+
+load_dotenv()
+passw = os.getenv("PASSWORD")
+pepper = os.getenv("PEPPER")
 
 class UserOperations:
-    def __init__(self,cursor, connection):
-        self.cursor = cursor
-        self.connection = connection
+    def __init__(self, db: Database):
+        self.db = db
+        self.user_id = None
+
+    
 
     def register_user(self, username, password):
         """ To register a new user """
@@ -22,27 +32,6 @@ class UserOperations:
         except Error as error:
             messagebox.showerror(f"Une erreur est survenue lors de l'enregistrement : {error}")
 
-    def update_score(self, user_id, score):
-        """To update the score for a registred user """
-        try:
-            self.cursor.execute("INSERT INTO scores (user_id, score) VALUES (%s, %s)", (user_id, score))
-            self.connection.commit()
-            messagebox.showinfo("Info","Votre score a été mis à jour.")
-        except Error as error:
-            messagebox.showerror("Erreur", f"Votre score n'a pas pu être mis à jour : {error}")
-        
-    def get_scores(self):
-        """To display scores ordered by descending values"""
-        try:
-            self.cursor.execute("""
-                SELECT users.username, scores.score FROM scores
-                JOIN users ON scores.user_id = users.id
-                ORDER BY scores.score DESC""")
-            results = self.cursor.fetchall()
-            hall_of_fame = {username: score for username, score in results}
-            return hall_of_fame
-        except Error as error:
-            messagebox.showerror("Erreur", f"Erreur lors de la récupération des scores : {error}")
-            return None
+
         
                 

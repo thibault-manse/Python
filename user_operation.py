@@ -77,6 +77,5 @@ class UserOperations:
             messagebox.showerror(f"Une erreur est survenue lors de l'enregistrement : {error}")
             return False
 
-
         
                 

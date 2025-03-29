@@ -25,3 +25,10 @@ class Database:
             self.db.close()
             print("La connexion à la base de donnée est close.")
     
+    def get_cursor(self):
+        """To get cursor"""
+        if self.db and self.db.is_connected():
+            return self.db.cursor()
+        else:
+            raise Exception("La connexion à la base de donnée n'est pas établie.")
+        

@@ -31,6 +31,11 @@ class UserOperations:
         if not username or len(username) <= 4 or not username.isalpha():
             return False
         return True
+    
+    def is_usernam_taken(self, username):
+        """To check if the username already exist in the database"""
+        self.cursor.execute("SELECT COUNT (*) FROM users WHERE username = %s ", (username,))
+        return self.cursor.fetchone()[0]>0
 
     def register_user(self, username, password):
         """ To register a new user """

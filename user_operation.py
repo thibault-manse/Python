@@ -47,18 +47,35 @@ class UserOperations:
             return False
         return True
 
-    def register_user(self, username, password):
+    def register_user(self, username, password1, password2):
         """ To register a new user """
+        if not self.validate_username(username):
+            messagebox.showerror("Erreur", "Le nom d'utilisateur doit contenir\nuniquement des lettres et être\nplus long que 4 caractères. ")
+            return False
+        if self.is_usernam_taken(username):
+            messagebox.showinfo("Info", f"{username} est déja utilisé !\nVeuillez choisir un autre nom d'utlisateur\nou vous connecter. ")
+            return False
+        if password1 != password2:
+            messagebox.showerror("Erreur", "Les mots de passe ne correspondent pas.")
+            return False
+        if not self.validate_password(password1):
+            messagebox.showerror("Erreur", "Le mot de passe doit contenir au moins\n10 caractères, y compris des majuscules,\ndes minuscules et des caractères spéciaux.")
+            return False
+
+        salt = self.generate_salt()
+        hashed_password = self.hash_password(password1, salt) 
+
         try:
-            self.cursor.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, password))
+            self.cursor.execute("INSERT INTO users (username, password, salt) VALUES (%s, %s)", (username, hashed_password, salt))
             self.connection.commit()
             messagebox.showinfo("Info", f"Bienvenue {username}.")
             return True
         except mysql.connector.IntegrityError:
-            messagebox.showinfo("Info",f"{username} est déja utilisé!\nConnectez vous,o\nou choississez un autre username.")
-            return False # method had to change here
+            messagebox.showinfo("Info",f"{username} est déja utilisé!\nConnectez vous,\nou choississez un autre nom d'utilisateur.")
+            return False
         except Error as error:
             messagebox.showerror(f"Une erreur est survenue lors de l'enregistrement : {error}")
+            return False
 
 
         

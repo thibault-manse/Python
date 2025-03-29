@@ -35,7 +35,17 @@ class UserOperations:
     def is_usernam_taken(self, username):
         """To check if the username already exist in the database"""
         self.cursor.execute("SELECT COUNT (*) FROM users WHERE username = %s ", (username,))
-        return self.cursor.fetchone()[0]>0
+        return self.cursor.fetchone()[0]>0 
+    
+    def validate_password(self,password):
+        """To validate password before hashing and registering in database"""
+        if (len(password) < 10 or
+            not any(character.isupper() for character in password)
+            or not any(character.islower() for character in password)
+            or not any(character.isdigit() for character in password)
+            or not any(character in '?./§¨£µ%°,;:!^$*+-_|[{#~&@]^}=()]' for character in password)):
+            return False
+        return True
 
     def register_user(self, username, password):
         """ To register a new user """

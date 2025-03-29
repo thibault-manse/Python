@@ -19,3 +19,9 @@ class Database:
             print(f"Une erreur est survenue lors de la connextion : {databaseerror}")
             self.db=None
     
+    def close(self):
+        """To close the database connection"""
+        if self.db and self.db.is_connected():
+            self.db.close()
+            print("La connexion à la base de donnée est close.")
+    

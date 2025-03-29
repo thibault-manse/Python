@@ -31,4 +31,10 @@ class Database:
             return self.db.cursor()
         else:
             raise Exception("La connexion à la base de donnée n'est pas établie.")
-        
+    
+    def get_connection(self):
+        """To return the database connection if it is active"""
+        if self.db is not None and self.db.is_connected():
+            return self.db
+        else:
+            raise Exception("La connexion à la base de donnée n'est pas établie.")

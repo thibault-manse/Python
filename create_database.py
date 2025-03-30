@@ -23,6 +23,10 @@ class CreateDatabase:
             )
             if connection.is_connected():
                 print("Connecté à la base de donnée.")
+                cursor = connection.cursor()
+                cursor.execute("USE minesweeper")
+                print("Base de données sélectionnée : minesweeper")
+                cursor.close()
             return connection
         except Error as error:
             print(f"Erreur : {error}")
@@ -45,7 +49,7 @@ class CreateDatabase:
                         id INT AUTO_INCREMENT PRIMARY KEY, 
                         username VARCHAR(100) UNIQUE NOT NULL, 
                         password VARCHAR(100) NOT NULL,
-                        salt VARCHAR(255)NOT NULL)
+                        salt VARCHAR(255) NOT NULL)
                            """)
             self.connection.commit()
             print("La table Users a été crée ou existe déja.")
@@ -70,4 +74,7 @@ class CreateDatabase:
             print(f"Erreur lors de la création de la table scores : {error}")
         finally:
             cursor.close()
+
+if __name__ == "__main__":
+    CreateDatabase()
     

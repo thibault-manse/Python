@@ -1,0 +1,35 @@
+import customtkinter as ctk 
+from user_operation import UserOperations
+from database_connection import Database
+
+class RegistrationUi:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Inscription")
+
+        self.register_label = ctk.CTkLabel(master, text="Créer un compte", font=("Arial", 18, "bold"))
+        self.register_label.pack(pady=10)
+
+        self.username_label = ctk.CTkLabel(master, text="Nom d'utilisateur :")
+        self.username_label.pack()
+        self.username_entry = ctk.CTkEntry(master)
+        self.username_entry.pack()
+
+        self.password_label = ctk.CTkLabel(master, text="Mot de passe :")
+        self.password_label.pack()
+        self.password_entry = ctk.CTkEntry(master, show="*")
+        self.password_entry.pack()
+
+        self.confirm_password_label = ctk.CTkLabel(master, text="Confirmez le mot de passe :")
+        self.confirm_password_label.pack()
+        self.confirm_password_entry = ctk.CTkEntry(master, show="*")
+        self.confirm_password_entry.pack()
+
+        self.show_password_var = ctk.BooleanVar()
+        self.show_password_checkbox = ctk.CTkCheckBox(master, text="Afficher le mot de passe", variable=self.show_password_var, command=self.toogle_password_visibility)
+        self.show_password_checkbox.pack()
+
+        self.register_button = ctk.CTkButton(master, text="S'ENREGISTRER", command=self.register)
+        self.register_button.pack(pady=5)
+
+        

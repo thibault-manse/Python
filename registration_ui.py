@@ -1,6 +1,7 @@
 import customtkinter as ctk 
 from user_operation import UserOperations
 from database_connection import Database
+from login_guest_ui import LoginGuestUi
 
 class RegistrationUi:
     def __init__(self, master):
@@ -48,4 +49,9 @@ class RegistrationUi:
         password2 = self.confirm_password_entry.get()
         db=Database()
         user_operation = UserOperations(db)
-        user_operation.register_user(username, password1, password2)
+        registration_successful = user_operation.register_user(username, password1, password2)
+        if registration_successful:
+            self.master.destroy()
+            new_root = ctk.CTk()
+            LoginGuestUi(new_root)
+            new_root.mainloop()

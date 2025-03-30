@@ -39,7 +39,7 @@ class CreateDatabase:
     
     def create_user_table(self):
         """Create the users table"""
-        cursor = self.connection.user()
+        cursor = self.connection.cursor()
         try:
             cursor.execute("""CREATE TABLE IF NOT EXISTS users (
                         id INT AUTO_INCREMENT PRIMARY KEY, 
@@ -51,10 +51,12 @@ class CreateDatabase:
             print("La table Users a été crée ou existe déja.")
         except Error as error:
             print(f"Erreur lors de la création de la table users : {error}")
+        finally:
+            cursor.close()
 
     def create_score_table(self):
         """Create the scores table"""
-        cursor = self.connection.score()
+        cursor = self.connection.cursor()
         try:
             cursor.execute("""CREATE TABLE IF NOT EXISTS scores (
                            score_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -66,5 +68,6 @@ class CreateDatabase:
             print("La table scores a été crée ou existe déja.")
         except Error as error:
             print(f"Erreur lors de la création de la table scores : {error}")
-
+        finally:
+            self.cursor.close()
     

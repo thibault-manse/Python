@@ -77,5 +77,7 @@ class UserOperations:
             messagebox.showerror(f"Une erreur est survenue lors de l'enregistrement : {error}")
             return False
 
+    def login_user(self, username, password):
+        pass
         
                 

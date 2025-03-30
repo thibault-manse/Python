@@ -36,4 +36,16 @@ class LoginGuestUi:
         self.guest_button = ctk.CTkButton(master, text="Jouer comme invité", command=self.play_as_guest)
         self.guest_button.pack(pady=5)
 
+    def login(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        db = Database()
+        user_operation = UserOperations(db)
+        user_operation.login_user(username, password)
+
+    def show_register_form(self):
+        pass
+
+    def play_as_guest(self):
+        pass
 

@@ -14,7 +14,7 @@ class LoginGuestUi:
         self.connect_label = ctk.CTkLabel(master, text="Se Connecter", font=("Arial" , 14))
         self.connect_label.pack(pady=5)
 
-        self.username_label = ctk.CTKLabel(master, text="Nom d'utilisateur :")
+        self.username_label = ctk.CTkLabel(master, text="Nom d'utilisateur :")
         self.username_label.pack()
         self.username_entry = ctk.CTkEntry(master)
         self.username_entry.pack()
@@ -30,7 +30,7 @@ class LoginGuestUi:
         self.new_user_label = ctk.CTkLabel(master, text="Nouveau joueur ?\nCréer un Compte")
         self.new_user_label.pack(pady=5)
 
-        self.register_button = ctk.CTkLabel(master, text="S'ENREGISTER", command=self.show_register_form)
+        self.register_button = ctk.CTkButton(master, text="S'ENREGISTER", command=self.show_register_form)
         self.register_button.pack(pady=5)
 
         self.guest_button = ctk.CTkButton(master, text="Jouer comme invité", command=self.play_as_guest)

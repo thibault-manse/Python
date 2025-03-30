@@ -49,5 +49,7 @@ class LoginGuestUi:
         RegistrationUi(self.master)
 
     def play_as_guest(self):
+        """To perform play as guest"""
+        # add logic to start the game as guest
         pass
 

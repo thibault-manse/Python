@@ -47,7 +47,7 @@ class LoginGuestUi:
         if user_id is not None:
             self.master.destroy()
             new_root = ctk.CTk()
-            game = Minesweeper(new_root, user_id)
+            Minesweeper(new_root, user_id)
             new_root.mainloop()
 
     def show_register_form(self):
@@ -56,6 +56,8 @@ class LoginGuestUi:
 
     def play_as_guest(self):
         """To perform play as guest"""
-        # add logic to start the game as guest
-        pass
+        self.master.destroy()
+        new_root = ctk.CTk()
+        Minesweeper(new_root)
+        new_root.mainloop()
 

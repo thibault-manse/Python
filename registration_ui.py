@@ -40,4 +40,12 @@ class RegistrationUi:
         else:
             self.password_entry.configure(show="*")
             self.confirm_password_entry.configure(show="*")
-  
+
+    def register(self):
+        """To perform registering process"""
+        username = self.username_entry.get()
+        password1 = self.password_entry.get()
+        password2 = self.confirm_password_entry.get()
+        db=Database()
+        user_operation = UserOperations(db)
+        user_operation.register_user(username, password1, password2)

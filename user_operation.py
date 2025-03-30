@@ -34,8 +34,12 @@ class UserOperations:
     
     def is_username_taken(self, username):
         """To check if the username already exist in the database"""
-        self.cursor.execute("SELECT COUNT (*) FROM users WHERE username = %s ", (username,))
-        return self.cursor.fetchone()[0]>0 
+        cursor = self.db.get_cursor()
+        try:
+            cursor.execute("SELECT COUNT (*) FROM users WHERE username = %s ", (username,))
+            return cursor.fetchone()[0]>0 
+        finally:
+            cursor.close()
     
     def validate_password(self,password):
         """To validate password before hashing and registering in database"""
@@ -52,7 +56,7 @@ class UserOperations:
         if not self.validate_username(username):
             messagebox.showerror("Erreur", "Le nom d'utilisateur doit contenir\nuniquement des lettres et être\nplus long que 4 caractères. ")
             return False
-        if self.is_usernam_taken(username):
+        if self.is_username_taken(username):
             messagebox.showinfo("Info", f"{username} est déja utilisé !\nVeuillez choisir un autre nom d'utlisateur\nou vous connecter. ")
             return False
         if password1 != password2:
@@ -63,10 +67,12 @@ class UserOperations:
             return False
 
         salt = self.generate_salt()
-        hashed_password = self.hash_password(password1, salt) 
+        hashed_password = self.hash_password(password1, salt)
+
+        cursor = self.db.get_cursor() 
 
         try:
-            self.cursor.execute("INSERT INTO users (username, password, salt) VALUES (%s, %s)", (username, hashed_password, salt))
+            cursor.execute("INSERT INTO users (username, password, salt) VALUES (%s, %s, %s)", (username, hashed_password, salt))
             self.connection.commit()
             messagebox.showinfo("Info", f"Bienvenue {username}.")
             return True
@@ -76,6 +82,8 @@ class UserOperations:
         except Error as error:
             messagebox.showerror(f"Une erreur est survenue lors de l'enregistrement : {error}")
             return False
+        finally:
+            cursor.close()
 
     def login_user(self, username, password):
         """To login an existing user"""
@@ -87,17 +95,23 @@ class UserOperations:
             messagebox.showerror("Erreur", "Nom d'utilisateur introuvable.")
             return False
         
-        self.cursor.execute("SELECT password, salt FROM users WHERE username = %s", (username,))
-        result = self.cursor.fetchone()
+        cursor = self.db.get_cursor()
+        try:
+            cursor.execute("SELECT password, salt FROM users WHERE username = %s", (username,))
+            result = cursor.fetchone()
 
-        if result:
-            stored_password, salt = result
-            hashed_password = self.hash_password(password, salt)
-            if hashed_password == stored_password:
-                messagebox.showinfo("Info", "Connexion réussie.")
-                self.user_id = username
-                return True
-            else:
-                messagebox.showerror("Erreur", "Mot de passe incorrect")
-                return False
-        return False
+            if result:
+                stored_password, salt = result
+                hashed_password = self.hash_password(password, salt)
+                if hashed_password == stored_password:
+                    messagebox.showinfo("Info", "Connexion réussie.")
+                    self.user_id = username
+                    return True
+                else:
+                    messagebox.showerror("Erreur", "Mot de passe incorrect")
+                    return False
+        except Exception as error:
+            messagebox.showerror("Erreur", f"Erreur lors de la connexion : {str(error)}")
+            return False
+        finally:
+            cursor.close()

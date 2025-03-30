@@ -26,10 +26,18 @@ class RegistrationUi:
         self.confirm_password_entry.pack()
 
         self.show_password_var = ctk.BooleanVar()
-        self.show_password_checkbox = ctk.CTkCheckBox(master, text="Afficher le mot de passe", variable=self.show_password_var, command=self.toogle_password_visibility)
+        self.show_password_checkbox = ctk.CTkCheckBox(master, text="Afficher le mot de passe", variable=self.show_password_var, command=self.toggle_password_visibility)
         self.show_password_checkbox.pack()
 
         self.register_button = ctk.CTkButton(master, text="S'ENREGISTRER", command=self.register)
         self.register_button.pack(pady=5)
 
-        
+    def toggle_password_visibility(self):
+        """To toggle the password visibility"""
+        if self.show_password_var.get():
+            self.password_entry.configure(show="")
+            self.confirm_password_entry.configure(show="")
+        else:
+            self.password_entry.configure(show="*")
+            self.confirm_password_entry.configure(show="*")
+  

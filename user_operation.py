@@ -32,7 +32,7 @@ class UserOperations:
             return False
         return True
     
-    def is_usernam_taken(self, username):
+    def is_username_taken(self, username):
         """To check if the username already exist in the database"""
         self.cursor.execute("SELECT COUNT (*) FROM users WHERE username = %s ", (username,))
         return self.cursor.fetchone()[0]>0 
@@ -78,6 +78,26 @@ class UserOperations:
             return False
 
     def login_user(self, username, password):
-        pass
+        """To login an existing user"""
+        if not self.validate_username(username):
+            messagebox.showerror("Erreur", f"Nom d'utilisateur invalide.")
+            return False
         
-                
+        if not self.is_username_taken(username):
+            messagebox.showerror("Erreur", "Nom d'utilisateur introuvable.")
+            return False
+        
+        self.cursor.execute("SELECT password, salt FROM users WHERE username = %s", (username,))
+        result = self.cursor.fetchone()
+
+        if result:
+            stored_password, salt = result
+            hashed_password = self.hash_password(password, salt)
+            if hashed_password == stored_password:
+                messagebox.showinfo("Info", "Connexion réussie.")
+                self.user_id = username
+                return True
+            else:
+                messagebox.showerror("Erreur", "Mot de passe incorrect")
+                return False
+        return False

@@ -69,5 +69,5 @@ class CreateDatabase:
         except Error as error:
             print(f"Erreur lors de la création de la table scores : {error}")
         finally:
-            self.cursor.close()
+            cursor.close()
     

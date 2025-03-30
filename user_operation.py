@@ -89,29 +89,29 @@ class UserOperations:
         """To login an existing user"""
         if not self.validate_username(username):
             messagebox.showerror("Erreur", f"Nom d'utilisateur invalide.")
-            return False
+            return None
         
         if not self.is_username_taken(username):
             messagebox.showerror("Erreur", "Nom d'utilisateur introuvable.")
-            return False
+            return None
         
         cursor = self.db.get_cursor()
         try:
-            cursor.execute("SELECT password, salt FROM users WHERE username = %s", (username,))
+            cursor.execute("SELECT id, password, salt FROM users WHERE username = %s", (username,))
             result = cursor.fetchone()
 
             if result:
-                stored_password, salt = result
+                user_id, stored_password, salt = result
                 hashed_password = self.hash_password(password, salt)
                 if hashed_password == stored_password:
                     messagebox.showinfo("Info", "Connexion réussie.")
-                    self.user_id = username
-                    return True
+                    self.user_id = user_id
+                    return user_id
                 else:
                     messagebox.showerror("Erreur", "Mot de passe incorrect")
-                    return False
+                    return None
         except Exception as error:
             messagebox.showerror("Erreur", f"Erreur lors de la connexion : {str(error)}")
-            return False
+            return None
         finally:
             cursor.close()

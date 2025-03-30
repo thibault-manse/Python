@@ -37,6 +37,7 @@ class LoginGuestUi:
         self.guest_button.pack(pady=5)
 
     def login(self):
+        """To perform the login"""
         username = self.username_entry.get()
         password = self.password_entry.get()
         db = Database()
@@ -44,7 +45,8 @@ class LoginGuestUi:
         user_operation.login_user(username, password)
 
     def show_register_form(self):
-        pass
+        """To open the register form window"""
+        RegistrationUi(self.master)
 
     def play_as_guest(self):
         pass

@@ -1,7 +1,7 @@
 import os
 from mysql.connector import Error
 import mysql.connector
-from customtkinter import messagebox
+from tkinter import messagebox
 import hashlib
 import secrets
 from dotenv import load_dotenv
@@ -36,7 +36,7 @@ class UserOperations:
         """To check if the username already exist in the database"""
         cursor = self.db.get_cursor()
         try:
-            cursor.execute("SELECT COUNT (*) FROM users WHERE username = %s ", (username,))
+            cursor.execute("SELECT COUNT(*) FROM users WHERE username = %s ", (username,))
             return cursor.fetchone()[0]>0 
         finally:
             cursor.close()
@@ -104,7 +104,7 @@ class UserOperations:
                 user_id, stored_password, salt = result
                 hashed_password = self.hash_password(password, salt)
                 if hashed_password == stored_password:
-                    messagebox.showinfo("Info", "Connexion réussie.")
+                    messagebox.showinfo("Info", f"Bienvenue {username}.")
                     self.user_id = user_id
                     return user_id
                 else:

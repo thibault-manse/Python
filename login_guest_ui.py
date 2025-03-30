@@ -2,6 +2,7 @@ import customtkinter as ctk
 from registration_ui import RegistrationUi 
 from user_operation import UserOperations
 from database_connection import Database
+from MinesweeperApp import Minesweeper
 
 class LoginGuestUi:
     def __init__(self, master):
@@ -42,7 +43,12 @@ class LoginGuestUi:
         password = self.password_entry.get()
         db = Database()
         user_operation = UserOperations(db)
-        user_operation.login_user(username, password)
+        user_id = user_operation.login_user(username, password)
+        if user_id is not None:
+            self.master.destroy()
+            new_root = ctk.CTk()
+            game = Minesweeper(new_root, user_id)
+            new_root.mainloop()
 
     def show_register_form(self):
         """To open the register form window"""

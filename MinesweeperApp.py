@@ -32,7 +32,6 @@ class Minesweeper:
         self.main_frame = ctk.CTkFrame(self.root)
         self.main_frame.pack(pady=20, padx=20)
 
-        # Cadre gauche 
         self.left_frame = ctk.CTkFrame(self.main_frame, width=200, height=400)
         self.left_frame.pack(side="left", fill="y", padx=10)
 
@@ -151,7 +150,7 @@ class Minesweeper:
         else:
             self.reveal(row, col)
             if self.empty_board():
-                self.endgame(True)  # Victoire
+                self.endgame(True)  
 
     def on_right_click(self, row, col):
         
@@ -188,10 +187,9 @@ class Minesweeper:
             text_color=color
         )
         
-        for i in range(10):  # Animation defloutage
+        for i in range(10):  
            alpha = i / 10.0
-           self.buttons[row][col].configure(fg_color=f'#{int(192 * (1 - alpha)):02x}{int(192 * (1 - alpha)):02x}{int(192 * (1 - alpha)):02x}') # Ajouter
-           self.root.update() 
+           self.buttons[row][col].configure(fg_color=f'#{int(192 * (1 - alpha)):02x}{int(192 * (1 - alpha)):02x}{int(192 * (1 - alpha)):02x}') 
            time.sleep(0.02) 
         
 
@@ -202,7 +200,7 @@ class Minesweeper:
                         self.reveal(r, c)
 
     def count_adjacent_mines(self, row, col):
-        """ number of mines around """
+        """ Compte le nombre de mines autour """
         count = 0
         for r in range(max(0, row-1), min(self.rows, row+2)):
             for c in range(max(0, col-1), min(self.cols, col+2)):
@@ -235,7 +233,7 @@ class Minesweeper:
                 self.buttons[row][col].configure(text="🚩", text_color="green")
         else:
             for row, col in self.mine_positions:
-                for _ in range(3):  # Animation d'explosion 
+                for _ in range(3):  
                     self.buttons[row][col].configure(fg_color='red') 
                     self.root.update() 
                     time.sleep(0.1) 
@@ -248,11 +246,10 @@ class Minesweeper:
                 new_score = self.score_manager.calculate_score("defeat", self.rows, self.cols) 
                 self.user_score += new_score 
                 self.score_manager.update_score(self.user_id, new_score)
-                self.score_label.configure(text=f"Score : {self.user_score}") # add this line
-            else:  # add this line
-                pass # add this line
+                self.score_label.configure(text=f"Score : {self.user_score}") 
+            else:  
+                pass 
 
-        # Désactiver tous les boutons
         for row in self.buttons:
             for btn in row:
                 btn.configure(state="disabled")

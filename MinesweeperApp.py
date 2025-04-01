@@ -2,8 +2,8 @@ import customtkinter as ctk
 import random
 from TimerCount import Timer
 from game_info import GameInfo
-from score import ScoreManager # add this line
-from score_ui import ScoreUI # add this line
+from score import ScoreManager
+from score_ui import ScoreUI 
 import time
 
 
@@ -19,36 +19,35 @@ class Minesweeper:
         8: "#696969"
     }
 
-    def __init__(self, root, user_id=None, db=None): # add user_id here
+    def __init__(self, root, user_id=None, db=None): 
         self.root = root
         self.root.title("Minesweeper")
         
         self.timer = Timer()
-        self.user_id = user_id # add this line 
-        self.mines =0 # add this line
-        self.db=db # add this line
-        self.user_score = 0 # add this line
+        self.user_id = user_id 
+        self.mines =0 
+        self.db=db 
+        self.user_score = 0 
 
         self.main_frame = ctk.CTkFrame(self.root)
         self.main_frame.pack(pady=20, padx=20)
 
-        # Cadre gauche 
         self.left_frame = ctk.CTkFrame(self.main_frame, width=200, height=400)
         self.left_frame.pack(side="left", fill="y", padx=10)
 
         self.title_label = ctk.CTkLabel(self.left_frame, text="MINESWEEPER", font=("Arial", 18, "bold"), text_color="red")
         self.title_label.pack(pady=10)
 
-        self.game_info = GameInfo(self.left_frame, 0, []) # add this line
+        self.game_info = GameInfo(self.left_frame, 0, []) 
         
-        self.score_manager = ScoreManager(self.db) # add this line
-        self.user_score = self.score_manager.get_total_score(self.user_id) # add this line
-        self.score_label = ctk.CTkLabel(self.left_frame, text=f"Score : {self.user_score}", font=("Arial",14)) # add this line
-        self.score_label.pack(pady=10) # add this line
+        self.score_manager = ScoreManager(self.db) 
+        self.user_score = self.score_manager.get_total_score(self.user_id) 
+        self.score_label = ctk.CTkLabel(self.left_frame, text=f"Score : {self.user_score}", font=("Arial",14)) 
+        self.score_label.pack(pady=10) 
 
-        self.score_ui = ScoreUI(self.root, self.score_manager) # add this line
+        self.score_ui = ScoreUI(self.root, self.score_manager) 
         self.hall_of_fame_button = ctk.CTkButton(self.left_frame, text="Classement des Joueurs", command=self.score_ui.open_hall_of_fame) # add this line
-        self.hall_of_fame_button.pack(pady=5) # add this line
+        self.hall_of_fame_button.pack(pady=5) 
 
         self.status_label = ctk.CTkLabel(self.left_frame, text="", font=("Arial", 14))
         self.status_label.pack(pady=10)
@@ -71,24 +70,24 @@ class Minesweeper:
         self.update_timer_display()
         
     def update_timer_display(self):
-        try: # add this line
+        try: 
             minutes, seconds = self.timer.update_timer()
             self.timer_label.configure(text=f" chronomètre : {minutes}m: {seconds}s")
             self.root.after(1000, self.update_timer_display)
-        except Exception as error:   # add this line     
-            print(f"Erreur dans update_timer_display : {error}") # add this line
+        except Exception as error:     
+            print(f"Erreur dans update_timer_display : {error}") 
     
 
     def start_game(self, rows, cols, mines):
         
-        self.mines = mines # add this line
+        self.mines = mines 
 
         self.timer.reset_timer()
         self.timer.start_timer()
 
-        self.game_info.update_flags(-self.game_info.flags)  # add this line  
-        self.game_info.update_question_marks(-self.game_info.question_marks) # add this line
-        self.game_info.update_mines(self.mines) # add this line
+        self.game_info.update_flags(-self.game_info.flags)   
+        self.game_info.update_question_marks(-self.game_info.question_marks) 
+        self.game_info.update_mines(self.mines) 
         
         self.status_label.configure(text="")
         for widget in self.grid_frame.winfo_children():
@@ -151,7 +150,7 @@ class Minesweeper:
         else:
             self.reveal(row, col)
             if self.empty_board():
-                self.endgame(True)  # Victoire
+                self.endgame(True)  
 
     def on_right_click(self, row, col):
         
@@ -161,15 +160,15 @@ class Minesweeper:
         if self.marked[(row, col)] is None:
             self.marked[(row, col)] = "🚩"
             self.buttons[row][col].configure(text="🚩", text_color="red")
-            self.game_info.update_flags(+1) # add this line
+            self.game_info.update_flags(+1) 
         elif self.marked[(row, col)] == "🚩":
             self.marked[(row, col)] = "?"
             self.buttons[row][col].configure(text="?", text_color="orange")
-            self.game_info.update_flags(-1) # add this line
-            self.game_info.update_question_marks(+1) #add this line
+            self.game_info.update_flags(-1) 
+            self.game_info.update_question_marks(+1) 
         else:
-            if self.marked[(row, col)] == "?": # add this line
-                self.game_info.update_question_marks(-1) # add this line
+            if self.marked[(row, col)] == "?": 
+                self.game_info.update_question_marks(-1) 
             self.marked[(row, col)] = None
             self.buttons[row][col].configure(text="")
 
@@ -180,7 +179,7 @@ class Minesweeper:
 
         self.revealed.add((row, col))
         count = self.count_adjacent_mines(row, col)
-        color = self.COLORS.get(count, "black")
+        color = self.COLORS.get(count, "white")
 
         self.buttons[row][col].configure(
             text=str(count) if count > 0 else '',
@@ -188,10 +187,9 @@ class Minesweeper:
             text_color=color
         )
         
-        for i in range(10):  # Animation defloutage
+        for i in range(10):  
            alpha = i / 10.0
-           self.buttons[row][col].configure(fg_color=f'#{int(192 * (1 - alpha)):02x}{int(192 * (1 - alpha)):02x}{int(192 * (1 - alpha)):02x}') # Ajouter
-           self.root.update() 
+           self.buttons[row][col].configure(fg_color=f'#{int(192 * (1 - alpha)):02x}{int(192 * (1 - alpha)):02x}{int(192 * (1 - alpha)):02x}') 
            time.sleep(0.02) 
         
 
@@ -212,49 +210,46 @@ class Minesweeper:
 
     def empty_board(self):
         
-        return len(self.revealed) == (self.rows * self.cols - self.mines)
-    
-    
+        return len(self.revealed) == (self.rows * self.cols - self.mines)        
 
     def endgame(self, victory):
         
         self.timer.stop_timer()
-        self.game_info.stop_updates() # add this line
+        self.game_info.stop_updates() 
         self.game_over_flag = True
 
         if victory:
             self.status_label.configure(text="🎉 Victoire ! 🎉", text_color="green")
 
-            if self.user_id is not None: # add this line
+            if self.user_id is not None: 
                 new_score = self.score_manager.calculate_score("victory", self.rows, self.cols) 
                 self.user_score += new_score
                 self.score_manager.update_score(self.user_id, new_score)
-                self.score_label.configure(text=f"Score : {self.user_score}") # add this line
-            else: # add this line
-                pass # add this line
+                self.score_label.configure(text=f"Score : {self.user_score}") 
+            else: 
+                pass 
 
             for row, col in self.mine_positions:
                 self.buttons[row][col].configure(text="🚩", text_color="green")
         else:
             for row, col in self.mine_positions:
-                for _ in range(3):  # Animation d'explosion 
+                for _ in range(3):  
                     self.buttons[row][col].configure(fg_color='red') 
                     self.root.update() 
                     time.sleep(0.1) 
-                    self.buttons[row][col].configure(fg_color='black') 
+                    self.buttons[row][col].configure(fg_color='white') 
                     self.root.update() 
                     time.sleep(0.1) 
                 self.buttons[row][col].configure(text='💣', fg_color='red') 
 
-            if self.user_id is not None: # add this line
-                new_score = self.score_manager.calculate_score("defeat", self.rows, self.cols) # add this line
-                self.user_score += new_score  # add this line
+            if self.user_id is not None:
+                new_score = self.score_manager.calculate_score("defeat", self.rows, self.cols) 
+                self.user_score += new_score 
                 self.score_manager.update_score(self.user_id, new_score)
-                self.score_label.configure(text=f"Score : {self.user_score}") # add this line
-            else:  # add this line
-                pass # add this line
+                self.score_label.configure(text=f"Score : {self.user_score}") 
+            else:  
+                pass 
 
-        # Désactiver tous les boutons
         for row in self.buttons:
             for btn in row:
                 btn.configure(state="disabled")
